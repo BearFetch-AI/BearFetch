@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 
 # Initialize pygame
 pygame.init()
@@ -76,6 +77,15 @@ def check_tie():
                 return False
     return True
 
+def ai_move():
+    empty_cells = [(r, c) for r in range(3) for c in range(3) if board[r][c] is None]
+    if empty_cells:
+        row, col = random.choice(empty_cells)
+        board[row][col] = "O"
+        return (row, col)
+    return None
+
+
 # Game loop
 running = True
 while running:
@@ -94,21 +104,28 @@ while running:
 
             # Place piece if cell is empty
             if board[clicked_row][clicked_col] is None:
-                board[clicked_row][clicked_col] = current_player
+                board[clicked_row][clicked_col] = "X"
 
-                # Check win
-                if check_winner(current_player):
-                    print(f"{current_player} wins!")
-                    game_over = True
+if check_winner("X"):
+    print("X wins!")
+    game_over = True
 
-                # Check tie
-                elif check_tie():
-                    print("It's a tie!")
-                    game_over = True
+elif check_tie():
+    print("It's a tie!")
+    game_over = True
 
-                else:
-                    # Switch player
-                    current_player = "O" if current_player == "X" else "X"
+else:
+    # AI move (only if game isn't over)
+    ai_row, ai_col = ai_move()
+    
+    if ai_row is not None:
+        if check_winner("O"):
+            print("O wins!")
+            game_over = True
+        elif check_tie():
+            print("It's a tie!")
+            game_over = True
+
 
     pygame.display.update()
 
