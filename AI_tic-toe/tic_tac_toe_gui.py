@@ -1,14 +1,12 @@
 import pygame
 import sys
 
-game_over = False
-
 # Initialize pygame
 pygame.init()
 
 # Constants
-WIDTH, HEIGHT = 600, 600
-LINE_WIDTH = 20
+WIDTH, HEIGHT = 300, 300
+LINE_WIDTH = 5
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
@@ -18,17 +16,18 @@ CELL_SIZE = WIDTH // 3
 
 # Setup screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("AI Tic-Tac-Toe game")
+pygame.display.set_caption("Tic-Tac-Toe")
 
-# Game board: empty cells represented by None
+# Game board: 3x3 grid initialized to None
 board = [[None, None, None],
          [None, None, None],
          [None, None, None]]
 
-# Player turn: "X" starts first
+# Start with player X
 current_player = "X"
+game_over = False
 
-# Draw the board grid
+# Draw grid lines
 def draw_grid():
     for i in range(1, 3):
         # Vertical lines
@@ -36,7 +35,7 @@ def draw_grid():
         # Horizontal lines
         pygame.draw.line(screen, BLACK, (0, i * CELL_SIZE), (WIDTH, i * CELL_SIZE), LINE_WIDTH)
 
-# Draw X and O
+# Draw Xs and Os
 def draw_marks():
     for row in range(3):
         for col in range(3):
@@ -52,6 +51,31 @@ def draw_marks():
                 radius = CELL_SIZE // 2 - 20
                 pygame.draw.circle(screen, BLUE, center, radius, LINE_WIDTH)
 
+# Check for a win
+def check_winner(player):
+    # Rows
+    for row in board:
+        if all(cell == player for cell in row):
+            return True
+    # Columns
+    for col in range(3):
+        if all(board[row][col] == player for row in range(3)):
+            return True
+    # Diagonals
+    if all(board[i][i] == player for i in range(3)):
+        return True
+    if all(board[i][2 - i] == player for i in range(3)):
+        return True
+    return False
+
+# Check for a tie
+def check_tie():
+    for row in board:
+        for cell in row:
+            if cell is None:
+                return False
+    return True
+
 # Game loop
 running = True
 while running:
@@ -63,55 +87,30 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.MOUSEBUTTONDOWN and not game_over:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             clicked_row = mouse_y // CELL_SIZE
             clicked_col = mouse_x // CELL_SIZE
 
-            # Only place if cell is empty
-            if not game_over and board[clicked_row][clicked_col] is None:
+            # Place piece if cell is empty
+            if board[clicked_row][clicked_col] is None:
                 board[clicked_row][clicked_col] = current_player
 
-    # Check for win
-    if check_winner(current_player):
-        print(f"{current_player} wins!")
-        game_over = True
+                # Check win
+                if check_winner(current_player):
+                    print(f"{current_player} wins!")
+                    game_over = True
 
-    # Check for tie
-    elif check_tie():
-        print("It's a tie!")
-        game_over = True
+                # Check tie
+                elif check_tie():
+                    print("It's a tie!")
+                    game_over = True
 
-    else:
-        current_player = "O" if current_player == "X" else "X"
-
+                else:
+                    # Switch player
+                    current_player = "O" if current_player == "X" else "X"
 
     pygame.display.update()
-
-def check_winner(player):
-    # Check rows
-    for row in board:
-        if all(cell == player for cell in row):
-            return True
-    # Check columns
-    for col in range(3):
-        if all(board[row][col] == player for row in range(3)):
-            return True
-    # Check diagonals
-    if all(board[i][i] == player for i in range(3)):
-        return True
-    if all(board[i][2 - i] == player for i in range(3)):
-        return True
-    return False
-
-def check_tie():
-    for row in board:
-        for cell in row:
-            if cell is None:
-                return False
-    return True
-
-
 
 pygame.quit()
 sys.exit()
