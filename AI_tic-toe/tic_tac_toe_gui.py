@@ -5,7 +5,7 @@ import sys
 pygame.init()
 
 # Constants
-WIDTH, HEIGHT = 300, 300
+WIDTH, HEIGHT = 600, 600
 LINE_WIDTH = 5
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
