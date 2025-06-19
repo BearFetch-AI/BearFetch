@@ -16,7 +16,7 @@ CELL_SIZE = WIDTH // 3
 
 # Setup screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Tic-Tac-Toe")
+pygame.display.set_caption("AI Tic-Tac-Toe game")
 
 # Game board: empty cells represented by None
 board = [[None, None, None],
