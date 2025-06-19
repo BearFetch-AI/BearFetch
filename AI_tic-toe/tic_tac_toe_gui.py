@@ -1,6 +1,8 @@
 import pygame
 import sys
 
+game_over = False
+
 # Initialize pygame
 pygame.init()
 
@@ -67,11 +69,49 @@ while running:
             clicked_col = mouse_x // CELL_SIZE
 
             # Only place if cell is empty
-            if board[clicked_row][clicked_col] is None:
+            if not game_over and board[clicked_row][clicked_col] is None:
                 board[clicked_row][clicked_col] = current_player
-                current_player = "O" if current_player == "X" else "X"
+
+    # Check for win
+    if check_winner(current_player):
+        print(f"{current_player} wins!")
+        game_over = True
+
+    # Check for tie
+    elif check_tie():
+        print("It's a tie!")
+        game_over = True
+
+    else:
+        current_player = "O" if current_player == "X" else "X"
+
 
     pygame.display.update()
+
+def check_winner(player):
+    # Check rows
+    for row in board:
+        if all(cell == player for cell in row):
+            return True
+    # Check columns
+    for col in range(3):
+        if all(board[row][col] == player for row in range(3)):
+            return True
+    # Check diagonals
+    if all(board[i][i] == player for i in range(3)):
+        return True
+    if all(board[i][2 - i] == player for i in range(3)):
+        return True
+    return False
+
+def check_tie():
+    for row in board:
+        for cell in row:
+            if cell is None:
+                return False
+    return True
+
+
 
 pygame.quit()
 sys.exit()
