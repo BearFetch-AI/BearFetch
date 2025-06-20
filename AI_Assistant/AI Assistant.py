@@ -18,7 +18,7 @@ def ask_ollama():
             response = requests.post(
                 "http://localhost:11434/api/generate",
                 json={
-                    "model": "mistral",  # or "llama3"
+                    "model": "gemma:2b",  # or "llama3"
                     "prompt": prompt,
                     "stream": False
                 }
@@ -37,20 +37,20 @@ def ask_ollama():
 
 # GUI setup
 window = tk.Tk()
-window.title("Local AI Assistant")
+window.title("Bearfetch AI")
 window.geometry("600x500")
 window.configure(bg="#f7f7f7")
 
 chat_log = scrolledtext.ScrolledText(window, wrap=tk.WORD, font=("Helvetica", 12), bg="#ffffff", fg="#000000", padx=10, pady=10)
-chat_log.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+chat_log.pack(padx=30, pady=30, fill=tk.BOTH, expand=True)
 
-input_frame = tk.Frame(window, bg="#f7f7f7")
+input_frame = tk.Frame(window, bg="#000000")
 input_frame.pack(fill=tk.X, padx=10, pady=5)
 
 input_box = tk.Entry(input_frame, font=("Helvetica", 12))
 input_box.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 10))
 
-send_button = tk.Button(input_frame, text="Send", font=("Helvetica", 12, "bold"), bg="#FFFFFF", fg="#434141", command=ask_ollama)
+send_button = tk.Button(input_frame, text="Send", font=("Helvetica", 12, "bold"), bg="#FFFFFF", fg="#000000", command=ask_ollama)
 send_button.pack(side=tk.RIGHT)
 
 input_box.bind("<Return>", lambda event: ask_ollama())
