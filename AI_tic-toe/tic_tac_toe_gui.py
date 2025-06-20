@@ -76,13 +76,52 @@ def check_tie():
             if cell is None:
                 return False
     return True
+def minimax(board_state, is_maximizing):
+    if check_winner("O"):
+        return 1
+    elif check_winner("X"):
+        return -1
+    elif check_tie():
+        return 0
+
+    if is_maximizing:
+        best_score = -float('inf')
+        for row in range(3):
+            for col in range(3):
+                if board_state[row][col] is None:
+                    board_state[row][col] = "O"
+                    score = minimax(board_state, False)
+                    board_state[row][col] = None
+                    best_score = max(score, best_score)
+        return best_score
+    else:
+        best_score = float('inf')
+        for row in range(3):
+            for col in range(3):
+                if board_state[row][col] is None:
+                    board_state[row][col] = "X"
+                    score = minimax(board_state, True)
+                    board_state[row][col] = None
+                    best_score = min(score, best_score)
+        return best_score
+
 
 def ai_move():
-    empty_cells = [(r, c) for r in range(3) for c in range(3) if board[r][c] is None]
-    if empty_cells:
-        row, col = random.choice(empty_cells)
-        board[row][col] = "O"
-        return (row, col)
+    best_score = -float('inf')
+    move = None
+    for row in range(3):
+        for col in range(3):
+            if board[row][col] is None:
+                board[row][col] = "O"
+                score = minimax(board, False)
+                board[row][col] = None
+                if score > best_score:
+                    best_score = score
+                    move = (row, col)
+
+    if move:
+        board[move[0]][move[1]] = "O"
+        return move
     return None
 
 
