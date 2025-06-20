@@ -25,4 +25,11 @@ Install dependencies using:
 
 ```bash
 pip install opencv-python pygame
+or
+python3 -m pip install opencv-python pygame
+
+```
+You can run it using this:
+python3 main.py
+
 
