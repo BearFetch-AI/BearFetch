@@ -110,21 +110,21 @@ while running:
                     print("X wins!")
                     game_over = True
 
-            elif check_tie():
-                print("It's a tie!")
-                game_over = True
-
-            else:
-            # AI move (only if game isn't over)
-                ai_row, ai_col = ai_move()
-    
-                if ai_row is not None:
-                 if check_winner("O"):
-                    print("O wins!")
-                    game_over = True
                 elif check_tie():
                     print("It's a tie!")
                     game_over = True
+
+                else:
+                    # AI move (only if game isn't over)
+                    ai_row, ai_col = ai_move()
+    
+                    if ai_row is not None:
+                        if check_winner("O"):
+                            print("O wins!")
+                            game_over = True
+                    elif check_tie():
+                            print("It's a tie!")
+                            game_over = True
 
 
     pygame.display.update()
