@@ -47,16 +47,26 @@ Use your own PNG or download a free sample like:
 
 📥 [Download Ollama here](https://ollama.com/)
 
-To install (macOS):
+To install for (macOS):
 ```bash
 brew install ollama
-
+```
 Installing Python Dependencies:
+```bash
 pip install opencv-python pygame
+```
 
-If pip doesn't work then do : python3 -m pip install opencv-python pygame
+If pip doesn't work then do : 
+```bash
+python3 -m pip install opencv-python pygame
+```
 
-Also most projects can be run using this command: python3 main.py
+Also most projects can be run using this command: 
+```bash
+python3 main.py
+```
 
-To pull a model use this: ollama pull llama2
-
+To pull a model use this: 
+```bash
+ollama pull llama2
+```
