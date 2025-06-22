@@ -1,7 +1,7 @@
 import cv2
 
 # Load the AI face and eye detectors
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier("/Users/sachin/Documents/AI filter test/AI_Face_Filter/haarcascade_frontalface_default.xml")
 eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
 
 # Load the glasses image
