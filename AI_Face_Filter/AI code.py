@@ -2,16 +2,16 @@ import cv2
 import os
 import sys
 
-# === Load Haar Cascades ===
-face_path = "/Users/sachin/Documents/AI filter test/AI_Face_Filter/haarcascade_frontalface_default.xml"
-eye_path = "/Users/sachin/Documents/AI filter test/AI_Face_Filter/haarcascade_eye.xml"
-glasses_path = "/Users/sachin/Documents/AI filter test/AI_Face_Filter/glasses.png"  # Rename for simplicity
+# === Full Paths ===
+base_path = "/Users/sachin/Documents/AI filter test/AI_Face_Filter/"
+face_path = os.path.join(base_path, "haarcascade_frontalface_default.xml")
+eye_path = os.path.join(base_path, "haarcascade_eye.xml")
+glasses_path = os.path.join(base_path, "_Pngtree_black_frame_hexagon_square_eye_7326001-removebg-preview.png")
 
-# Load cascades
+# === Load Cascades ===
 face_cascade = cv2.CascadeClassifier(face_path)
 eye_cascade = cv2.CascadeClassifier(eye_path)
 
-# Safety checks
 if face_cascade.empty():
     print("❌ ERROR: Could not load face cascade.")
     sys.exit()
@@ -20,10 +20,10 @@ if eye_cascade.empty():
     print("❌ ERROR: Could not load eye cascade.")
     sys.exit()
 
-# === Load Glasses PNG ===
-glasses = cv2.imread(glasses_path, -1)
-if glasses is None:
-    print("❌ ERROR: Glasses image not found or failed to load.")
+# === Load Glasses PNG with Alpha Channel ===
+glasses = cv2.imread(glasses_path, cv2.IMREAD_UNCHANGED)
+if glasses is None or glasses.shape[2] != 4:
+    print(f"❌ ERROR: Could not load glasses image from: {glasses_path}")
     sys.exit()
 
 # === Start Webcam ===
@@ -32,15 +32,19 @@ if not cap.isOpened():
     print("❌ ERROR: Could not open webcam.")
     sys.exit()
 
-# === Function to Overlay Glasses ===
-def overlay_image(background, overlay, x, y, w, h):
-    overlay = cv2.resize(overlay, (w, h))
-    for i in range(h):
-        for j in range(w):
-            if y + i >= background.shape[0] or x + j >= background.shape[1]:
-                continue  # prevent overflow
-            if overlay[i, j][3] != 0:  # Check alpha channel
-                background[y + i, x + j] = overlay[i, j][:3]
+# === Overlay Transparent PNG ===
+def overlay_image_alpha(img, img_overlay, x, y, overlay_size):
+    overlay = cv2.resize(img_overlay, overlay_size)
+
+    b, g, r, a = cv2.split(overlay)
+    overlay_rgb = cv2.merge((b, g, r))
+    mask = cv2.merge((a, a, a))
+
+    h, w = overlay_rgb.shape[:2]
+    roi = img[y:y+h, x:x+w]
+
+    # Blend overlay within the region of interest
+    img[y:y+h, x:x+w] = cv2.addWeighted(roi, 1 - a/255.0, overlay_rgb, a/255.0, 0)
 
 # === Main Loop ===
 while True:
@@ -56,13 +60,15 @@ while True:
         eyes = eye_cascade.detectMultiScale(roi_gray)
 
         if len(eyes) >= 2:
-            overlay_image(frame, glasses, x, y + int(h / 4), w, int(h / 3))
+            try:
+                overlay_image_alpha(frame, glasses, x, y + int(h / 4), (w, int(h / 3)))
+            except:
+                pass  # Avoid crash if dimensions are off-screen
 
     cv2.imshow("Your AI Filter!", frame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-
-# === Cleanup ===
+    
 cap.release()
 cv2.destroyAllWindows()
