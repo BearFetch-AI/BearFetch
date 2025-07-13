@@ -5,6 +5,7 @@ from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout
 from tensorflow.keras.models import Model
 import matplotlib.pyplot as plt
 
+
 # Set paths to your dataset
 train_dir = '/Users/sachin/Downloads/dataset/training_set'
 val_dir = '/Users/sachin/Downloads/dataset/test_set'
