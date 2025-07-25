@@ -5,7 +5,7 @@ import numpy as np
 from tensorflow.keras.models import load_model
 
 # Load model and labels
-model = load_model("keras_Model.h5", compile=False)
+model = load_model("keras_model.h5", compile=False)
 with open("labels.txt", "r") as f:
     class_names = [line.strip() for line in f.readlines()]
 
@@ -64,7 +64,7 @@ result_label.pack(pady=10)
 
 # Upload button
 btn = tk.Button(window, text="Upload Image", font=BUTTON_FONT, command=predict_image,
-                bg="#8b5e3c", fg="white", activebackground="#a86d4d", padx=10, pady=5)
+                bg="#8b5e3c", fg="black", activebackground="#a86d4d", padx=10, pady=5)
 btn.pack(pady=10)
 
 # Image preview
