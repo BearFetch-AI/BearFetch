@@ -1,0 +1,13 @@
+path: /Users/sachin/Documents/AI filter test/Plastic_Waste_Detector/waste_dataset
+train: /Users/sachin/Documents/AI filter test/Plastic_Waste_Detector/waste_dataset/images/Training_Data
+val: /Users/sachin/Documents/AI filter test/Plastic_Waste_Detector/waste_dataset/images/Testing_Data
+
+names:
+  0: battery
+  1: biological
+  2: cardboard
+  3: clothes
+  4: glass
+  5: metal
+  6: paper
+  7: trash
